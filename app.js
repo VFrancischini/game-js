@@ -1,25 +1,57 @@
-alert('Boas vindas ao jogo do número secreto.');
+let numeroAleatorio = gerarNumeroAleatorio();
+let tentativa = 1;
 
-let numeroMaximo = 100;
-let numeroSecreto = parseInt(Math.random() * numeroMaximo + 1);
-let chute;
-let tentativas = 1;
+function exibirTextoNaTela(tag, texto) {
+    let campo = document.querySelector(tag);
 
-while (chute != numeroSecreto) {
-    chute = prompt(`Escolha um número entre 1 e ${numeroMaximo}.`);
-
-    if (chute == numeroSecreto) {
-        break;
-    } else {
-        if (chute > numeroSecreto) {
-            alert(`O número secreto é menor que ${chute}.`);
-        } else {
-            alert(`O número secreto é maior que ${chute}.`);
-        }
-    }
-    tentativas++;
+    campo.innerHTML = texto;
 }
 
-let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
+function mensagemInicial() {
+    exibirTextoNaTela('h1', 'Jogo do número secreto');
+    exibirTextoNaTela('p', 'Escolha um número entre 1 e 100');
+}
 
-alert(`Isso ai! Você descobriu o número secreto ${numeroSecreto} com ${tentativas} ${palavraTentativa}.`);
+mensagemInicial();
+
+function verificarChute() {
+    let chute = document.querySelector('input').value;
+
+    if (chute == numeroAleatorio) {
+        let palavraTentativa = tentativa > 1 ? 'tentativas' : 'tentativa';
+        let mensagemDeAcerto = `Você descobriu o número secreto com ${tentativa} ${palavraTentativa}.`;
+
+        exibirTextoNaTela('h1', 'Acertou!');
+        exibirTextoNaTela('p', mensagemDeAcerto);
+        document.getElementById('reiniciar').removeAttribute('disabled');
+    } else {
+        if (chute > numeroAleatorio) {
+            exibirTextoNaTela('p', 'O número secreto é menor.');
+        } else {
+            exibirTextoNaTela('p', 'O número secreto é maior.');
+        }
+
+        limpaCampo();
+    }
+
+    tentativa++;
+}
+
+function gerarNumeroAleatorio() {
+    return parseInt(Math.random() * 100 + 1);
+}
+
+function limpaCampo() {
+    chute = document.querySelector('input');
+
+    chute.value = '';
+}
+
+function reiniciarJogo() {
+    numeroAleatorio = gerarNumeroAleatorio();
+    tentativa = 1;
+    document.getElementById('reiniciar').setAttribute('disabled', true);
+
+    mensagemInicial();
+    limpaCampo();
+}
