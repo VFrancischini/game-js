@@ -1,3 +1,5 @@
+let numeroMaximo = 100;
+let listaNumerosSorteados = [];
 let numeroAleatorio = gerarNumeroAleatorio();
 let tentativa = 1;
 
@@ -17,28 +19,44 @@ mensagemInicial();
 function verificarChute() {
     let chute = document.querySelector('input').value;
 
-    if (chute == numeroAleatorio) {
-        let palavraTentativa = tentativa > 1 ? 'tentativas' : 'tentativa';
-        let mensagemDeAcerto = `Você descobriu o número secreto com ${tentativa} ${palavraTentativa}.`;
+    if (chute != '') {
+        if (chute == numeroAleatorio) {
+            let palavraTentativa = tentativa > 1 ? 'tentativas' : 'tentativa';
+            let mensagemDeAcerto = `Você descobriu o número secreto com ${tentativa} ${palavraTentativa}.`;
 
-        exibirTextoNaTela('h1', 'Acertou!');
-        exibirTextoNaTela('p', mensagemDeAcerto);
-        document.getElementById('reiniciar').removeAttribute('disabled');
-    } else {
-        if (chute > numeroAleatorio) {
-            exibirTextoNaTela('p', 'O número secreto é menor.');
+            exibirTextoNaTela('h1', 'Acertou!');
+            exibirTextoNaTela('p', mensagemDeAcerto);
+            document.getElementById('reiniciar').removeAttribute('disabled');
         } else {
-            exibirTextoNaTela('p', 'O número secreto é maior.');
-        }
+            if (chute > numeroAleatorio) {
+                exibirTextoNaTela('p', 'O número secreto é menor.');
+            } else {
+                exibirTextoNaTela('p', 'O número secreto é maior.');
+            }
 
-        limpaCampo();
+            limpaCampo();
+        }
+    } else {
+        exibirTextoNaTela('p', 'Digite um número válido!');
     }
 
     tentativa++;
 }
 
 function gerarNumeroAleatorio() {
-    return parseInt(Math.random() * 100 + 1);
+    let numeroEscolhido = parseInt(Math.random() * numeroMaximo + 1);
+    let quantidadeDeElementosNaLista = listaNumerosSorteados.length;
+
+    if (quantidadeDeElementosNaLista == numeroMaximo) {
+        listaNumerosSorteados = [];
+    }
+
+    if (listaNumerosSorteados.includes(numeroEscolhido)) {
+        return gerarNumeroAleatorio();
+    } else {
+        listaNumerosSorteados.push(numeroEscolhido);
+        return numeroEscolhido;
+    }
 }
 
 function limpaCampo() {
